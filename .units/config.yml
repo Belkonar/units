@@ -1,8 +1,7 @@
 name: units3
 kind: command
-rawCommands:
-  - run: cat hello.txt
-    name: Run units2
+commands:
+  - cat hello.txt
 ---
 name: units1
 kind: command
@@ -11,7 +10,7 @@ commands:
 ---
 name: units2
 kind: command
-rawCommands:
+commands:
   - run: echo "{{root.name}}"
     name: Run units2
 ---

@@ -10,8 +10,7 @@ interface PipelineUnit extends Unit {
 }
 
 interface CommandUnit extends Unit {
-  commands?: string[];
-  rawCommands?: string[];
+  commands?: any[];
 }
 
 interface RenderStateMini {

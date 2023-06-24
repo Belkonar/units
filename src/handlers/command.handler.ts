@@ -29,13 +29,13 @@ export class CommandHandler implements UnitHandler {
     steps.push(restore);
 
     for (const cmd of command.commands ?? []) {
-      steps.push({
-        run: cmd,
-      });
-    }
-
-    for (const cmd of command.rawCommands ?? []) {
-      steps.push(cmd);
+      if (typeof cmd === 'string') {
+        steps.push({
+          run: cmd,
+        });
+      } else {
+        steps.push(cmd);
+      }
     }
 
     steps.push(persist);
