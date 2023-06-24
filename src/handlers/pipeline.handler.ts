@@ -9,7 +9,31 @@ export class PipelineHandler implements UnitHandler {
   renderStandalone(unit: Unit, state: RenderState): string[] {
     const pipeline = unit as PipelineUnit;
 
-    state.fragmentBlocks['jobs'] = {};
+    state.fragmentBlocks['jobs'] = {
+      init: {
+        'runs-on': 'ubuntu-latest',
+        steps: [
+          {
+            uses: 'actions/checkout@v3',
+          },
+          {
+            uses: 'actions/upload-artifact@v3',
+            with: {
+              name: 'build',
+              path: '*\n!.git/*',
+            },
+          },
+        ],
+      },
+    };
+
+    state.state['lastJob'] = 'init';
+
+    const parameterBag: Record<string, any> = {};
+
+    if (pipeline.parameters) {
+      parameterBag['root'] = JSON.parse(state.files[pipeline.parameters]);
+    }
 
     for (const unitName of pipeline.units) {
       const unitRef = this.parseUnitRef(unitName, unit.namespace);
@@ -30,12 +54,12 @@ export class PipelineHandler implements UnitHandler {
         throw new Error(`Handler not found: ${targetUnit.kind}`);
       }
 
-      handler.render(targetUnit, state);
+      handler.render(targetUnit, state, parameterBag);
     }
 
     const pipelineCode = {
       jobs: state.fragmentBlocks['jobs'],
-      name: 'ci',
+      name: unit.name,
       on: ['push'],
     };
 
@@ -58,7 +82,7 @@ export class PipelineHandler implements UnitHandler {
     };
   }
 
-  render(unit: Unit, state: RenderState) {
+  render(unit: Unit, state: RenderState, parameterBag: Record<string, any>) {
     // No Op
   }
 }

@@ -1,18 +1,55 @@
 jobs:
+  init:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/upload-artifact@v3
+        with:
+          name: build
+          path: |-
+            *
+            !.git/*
   units1:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: build
       - run: echo "Hello World"
+      - uses: actions/upload-artifact@v3
+        with:
+          name: build
+          path: "*"
+    needs:
+      - init
   units2:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "${root.name}"
+      - uses: actions/download-artifact@v3
+        with:
+          name: build
+      - run: echo "dave"
         name: Run units2
+      - uses: actions/upload-artifact@v3
+        with:
+          name: build
+          path: "*"
+    needs:
+      - units1
   units3:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: build
       - run: echo "Hi Bob"
         name: Run units2
-name: ci
+      - uses: actions/upload-artifact@v3
+        with:
+          name: build
+          path: "*"
+    needs:
+      - units2
+name: main
 on:
   - push

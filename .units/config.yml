@@ -12,7 +12,7 @@ commands:
 name: units2
 kind: command
 rawCommands:
-  - run: echo "${root.name}"
+  - run: echo "{{root.name}}"
     name: Run units2
 ---
 name: main

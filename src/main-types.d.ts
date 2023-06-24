@@ -28,5 +28,9 @@ interface RenderState extends RenderStateMini {
 interface UnitHandler {
   isStandalone(unit: Unit): boolean;
   renderStandalone(unit: Unit, state: RenderState): string[];
-  render(unit: Unit, state: RenderState);
+  render(
+    unit: Unit,
+    state: RenderState,
+    parameterBag: Record<string, any>,
+  ): void;
 }
