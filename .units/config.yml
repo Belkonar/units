@@ -1,23 +1,8 @@
-name: units3
-kind: command
-commands:
-  - cat hello.txt
----
-name: units1
-kind: command
-commands:
-  - echo "Hello World" > hello.txt
----
-name: units2
-kind: command
-commands:
-  - run: echo "{{root.name}}"
-    name: Run units2
+name: pack
+kind: package
+source: 'units.yml'
 ---
 name: main
 kind: pipeline
 parameters: 'params.json'
-units:
-  - command:units1
-  - command:units2
-  - command:units3
+reference: pack.pipeline:main

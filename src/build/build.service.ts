@@ -2,32 +2,24 @@ import { Injectable } from '@nestjs/common';
 import * as YAML from 'yaml';
 import { PipelineHandler } from '../handlers/pipeline.handler';
 import { CommandHandler } from '../handlers/command.handler';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class BuildService {
   static handlers: Record<string, UnitHandler> = {};
 
   buildPipelines(files: Record<string, string>): Record<string, string> {
-    const configRaw = files['config.yml'];
-
-    if (!configRaw) {
-      return {};
-    }
+    const units: Unit[] = [];
 
     const results: Record<string, string> = {};
-
-    const units = YAML.parseAllDocuments(configRaw).map((doc) =>
-      doc.toJSON(),
-    ) as Unit[];
-
-    units.forEach((unit) => {
-      unit.namespace = 'local'; // TODO: fix this
-    });
 
     const miniState: RenderStateMini = {
       files,
       units,
+      rewrites: {},
     };
+
+    this.loadUnits('config.yml', miniState);
 
     for (const unit of units) {
       const handler = BuildService.handlers[unit.kind];
@@ -46,6 +38,37 @@ export class BuildService {
     }
 
     return results;
+  }
+
+  loadUnits(file: string, miniState: RenderStateMini, namespace = uuidv4()) {
+    const configRaw = miniState.files[file];
+
+    if (!configRaw) {
+      return;
+    }
+
+    const newList = YAML.parseAllDocuments(configRaw).map<Unit>((doc) => ({
+      ...doc.toJSON(),
+      namespace,
+    }));
+
+    const packages: PackageUnit[] = [];
+
+    for (const unit of newList) {
+      if (unit.kind === 'package') {
+        packages.push(unit as PackageUnit);
+      } else {
+        miniState.units.push(unit);
+      }
+    }
+
+    for (const pack of packages) {
+      const targetNamespace = uuidv4();
+
+      miniState.rewrites[`${namespace}.${pack.name}`] = targetNamespace;
+
+      this.loadUnits(pack.source, miniState, targetNamespace);
+    }
   }
 }
 

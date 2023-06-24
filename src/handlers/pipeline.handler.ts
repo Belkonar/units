@@ -1,13 +1,15 @@
 import * as YAML from 'yaml';
 import { BuildService } from '../build/build.service';
+import { getStep } from '../helpers';
 
 export class PipelineHandler implements UnitHandler {
   isStandalone(unit: Unit): boolean {
-    return true;
+    const pipeline = unit as PipelineUnit;
+    return !pipeline.packed;
   }
 
   renderStandalone(unit: Unit, state: RenderState): string[] {
-    const pipeline = unit as PipelineUnit;
+    let pipeline = unit as PipelineUnit;
 
     state.fragmentBlocks['jobs'] = {
       init: {
@@ -35,8 +37,24 @@ export class PipelineHandler implements UnitHandler {
       parameterBag['root'] = JSON.parse(state.files[pipeline.parameters]);
     }
 
+    if (pipeline.reference) {
+      const newPipeline = getStep<PipelineUnit>(
+        pipeline.reference,
+        '',
+        state,
+        unit.namespace,
+      );
+
+      pipeline = {
+        ...pipeline,
+        units: newPipeline.units,
+        namespace: newPipeline.namespace,
+      };
+    }
+
     for (const unitName of pipeline.units) {
-      const unitRef = this.parseUnitRef(unitName, unit.namespace);
+      const unitRef = this.parseUnitRef(unitName, pipeline.namespace);
+
       const targetUnit = state.units.find(
         (x) =>
           x.name === unitRef.name &&
@@ -63,7 +81,7 @@ export class PipelineHandler implements UnitHandler {
       on: ['push'],
     };
 
-    return [`.github/workflows/${unit.name}.yml`, YAML.stringify(pipelineCode)];
+    return [`.github/workflows/${pipeline.name}.yml`, YAML.stringify(pipelineCode)];
   }
 
   parseUnitRef(unitRef: string, n: string): Unit {

@@ -7,15 +7,23 @@ interface Unit {
 interface PipelineUnit extends Unit {
   parameters: string;
   units: string[];
+  packed: boolean;
+  reference: string;
 }
 
 interface CommandUnit extends Unit {
   commands?: any[];
 }
 
+interface PackageUnit extends Unit {
+  name: string;
+  source: string;
+}
+
 interface RenderStateMini {
   files: Record<string, string>;
   units: Unit[];
+  rewrites: Record<string, string>;
 }
 
 interface RenderState extends RenderStateMini {
