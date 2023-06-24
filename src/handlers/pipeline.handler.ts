@@ -81,7 +81,10 @@ export class PipelineHandler implements UnitHandler {
       on: ['push'],
     };
 
-    return [`.github/workflows/${pipeline.name}.yml`, YAML.stringify(pipelineCode)];
+    return [
+      `.github/workflows/${pipeline.name}.yml`,
+      YAML.stringify(pipelineCode),
+    ];
   }
 
   parseUnitRef(unitRef: string, n: string): Unit {
