@@ -1,0 +1,18 @@
+jobs:
+  units1:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Hello World"
+  units2:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "${root.name}"
+        name: Run units2
+  units3:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Hi Bob"
+        name: Run units2
+name: ci
+on:
+  - push

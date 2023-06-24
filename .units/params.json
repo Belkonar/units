@@ -1,0 +1,7 @@
+{
+  "name": "dave",
+  "envs": [
+    "dev",
+    "prod"
+  ]
+}

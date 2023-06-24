@@ -1,0 +1,24 @@
+name: units3
+kind: command
+rawCommands:
+  - run: echo "Hi Bob"
+    name: Run units2
+---
+name: units1
+kind: command
+commands:
+  - echo "Hello World"
+---
+name: units2
+kind: command
+rawCommands:
+  - run: echo "${root.name}"
+    name: Run units2
+---
+name: main
+kind: pipeline
+parameters: 'params.json'
+units:
+  - command:units1
+  - command:units2
+  - command:units3
