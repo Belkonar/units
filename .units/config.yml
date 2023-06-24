@@ -1,13 +1,13 @@
 name: units3
 kind: command
 rawCommands:
-  - run: echo "Hi Bob"
+  - run: cat hello.txt
     name: Run units2
 ---
 name: units1
 kind: command
 commands:
-  - echo "Hello World"
+  - echo "Hello World" > hello.txt
 ---
 name: units2
 kind: command

@@ -15,7 +15,7 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: build
-      - run: echo "Hello World"
+      - run: echo "Hello World" > hello.txt
       - uses: actions/upload-artifact@v3
         with:
           name: build
@@ -42,7 +42,7 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: build
-      - run: echo "Hi Bob"
+      - run: cat hello.txt
         name: Run units2
       - uses: actions/upload-artifact@v3
         with:
