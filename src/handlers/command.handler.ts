@@ -42,12 +42,18 @@ export class CommandHandler implements UnitHandler {
 
     steps.push(persist);
 
+    const jobTemp: any = {
+      'runs-on': 'ubuntu-latest',
+      steps,
+      needs: [state.state['lastJob']],
+    }
+
+    if (command.environment) {
+      jobTemp.environment = command.environment;
+    }
+
     jobs[commandName] = replacer(
-      {
-        'runs-on': 'ubuntu-latest',
-        steps,
-        needs: [state.state['lastJob']],
-      },
+      jobTemp,
       parameterBag,
     );
 

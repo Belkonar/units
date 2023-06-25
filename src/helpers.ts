@@ -1,9 +1,11 @@
 import * as jmespath from 'jmespath';
 
 export function replacer<T>(obj: T, parameterBag: Record<string, any>): T {
-  const regex = /{{(.+?)}}/g;
+  const regex = /<% *(.+?) *%>/g;
 
   let str = JSON.stringify(obj);
+
+  console.log(str);
 
   const matches = [...str.matchAll(regex)];
 

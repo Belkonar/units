@@ -11,13 +11,14 @@ commands:
 name: units2
 kind: command
 commands:
-  - run: echo "{{root.name}}"
+  - run: echo "<% root.name %>"
     name: Run units2
 ---
 name: printer
 kind: command
+environment: <% env %>
 commands:
-  - echo "{{env}}"
+  - echo "<% env %>"
 ---
 name: per-env
 kind: container
