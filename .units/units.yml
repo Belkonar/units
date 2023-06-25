@@ -1,42 +1,43 @@
-name: units3
-kind: command
-commands:
-  - cat hello.txt
----
-name: units1
-kind: command
-commands:
-  - echo "Hello World" > hello.txt
----
-name: units2
-kind: command
-commands:
-  - run: echo "<% root.name %>"
-    name: Run units2
----
-name: printer
-kind: command
-environment: <% env %>
-commands:
-  - echo "<% env %>"
----
-name: per-env
-kind: container
-loop: root.envs
-as: env
-units:
-  - command:printer
----
-name: root
-kind: container
-units:
-  - command:units1
-  - command:units2
-  - command:units3
----
-name: main
-kind: pipeline
-packed: true
-units:
-  - container:root
-  - container:per-env
+- name: units3
+  kind: command
+  commands:
+    - cat hello.txt
+
+- name: units1
+  kind: command
+  commands:
+    - echo "Hello World" > hello.txt
+
+- name: units2
+  kind: command
+  commands:
+    - run: echo "<% root.name %>"
+      name: Run units2
+
+- name: printer
+  kind: command
+  environment: <% env %>
+  commands:
+    - echo "<% env %>"
+    - echo ${{ vars.test }}
+
+- name: per-env
+  kind: container
+  loop: root.envs
+  as: env
+  units:
+    - command:printer
+
+- name: root
+  kind: container
+  units:
+    - command:units1
+    - command:units2
+    - command:units3
+
+- name: main
+  kind: pipeline
+  packed: true
+  units:
+    - container:root
+    - container:per-env

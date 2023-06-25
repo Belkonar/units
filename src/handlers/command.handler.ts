@@ -8,7 +8,7 @@ export class CommandHandler implements UnitHandler {
 
   render(unit: Unit, state: RenderState, parameterBag: Record<string, any>) {
     const command = unit as CommandUnit;
-    const commandName = command.name + '-' + uuidv4().split('-')[0];
+    const commandName = command.name + state.state['postfix'];
     const jobs = state.fragmentBlocks['jobs'] as Record<string, any>;
 
     const steps: any[] = [];
@@ -46,7 +46,7 @@ export class CommandHandler implements UnitHandler {
       'runs-on': 'ubuntu-latest',
       steps,
       needs: [state.state['lastJob']],
-    }
+    };
 
     if (command.environment) {
       jobTemp.environment = command.environment;

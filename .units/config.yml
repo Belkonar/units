@@ -1,8 +1,8 @@
-name: pack
-kind: package
-source: 'units.yml'
----
-name: main
-kind: pipeline
-parameters: 'params.json'
-reference: pack.pipeline:main
+- name: pack
+  kind: package
+  source: 'units.yml'
+
+- name: main
+  kind: pipeline
+  parameters: 'params.json'
+  reference: pack.pipeline:main

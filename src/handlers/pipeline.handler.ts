@@ -30,6 +30,7 @@ export class PipelineHandler implements UnitHandler {
     };
 
     state.state['lastJob'] = 'init';
+    state.state['postfix'] = '';
 
     const parameterBag: Record<string, any> = {};
 

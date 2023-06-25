@@ -48,10 +48,12 @@ export class BuildService {
       return;
     }
 
-    const newList = YAML.parseAllDocuments(configRaw).map<Unit>((doc) => ({
-      ...doc.toJSON(),
-      namespace,
-    }));
+    const newList: Unit[] = YAML.parseDocument(configRaw)
+      .toJSON()
+      .map((doc) => ({
+        ...doc,
+        namespace,
+      }));
 
     const packages: PackageUnit[] = [];
 

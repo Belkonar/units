@@ -74,13 +74,20 @@ export class ContainerHandler implements UnitHandler {
     const iter = jmespath.search(parameterBag, container.loop);
     console.log(iter);
 
-    for (const item of iter) {
+    const snapshot = state.state['postfix'] as string;
+
+    for (const i in iter) {
+      const item = iter[i];
+      state.state['postfix'] = `${snapshot}-${i}`;
+
       // parameterBag[container.as] = item;
       this.handleSingle(container, state, {
         ...parameterBag,
         [container.as]: item,
       });
     }
+
+    state.state['postfix'] = snapshot;
 
     // for (const unitName of container.units) {
     //   const unitRef = this.parseUnitRef(unitName, container.namespace);

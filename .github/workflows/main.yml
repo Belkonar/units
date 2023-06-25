@@ -9,7 +9,7 @@ jobs:
           path: |-
             *
             !.git/*
-  units1-ae1e6703:
+  units1:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v3
@@ -22,7 +22,7 @@ jobs:
           path: "*"
     needs:
       - init
-  units2-cfba737e:
+  units2:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v3
@@ -35,8 +35,8 @@ jobs:
           name: build
           path: "*"
     needs:
-      - units1-ae1e6703
-  units3-6b643fbc:
+      - units1
+  units3:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v3
@@ -48,34 +48,36 @@ jobs:
           name: build
           path: "*"
     needs:
-      - units2-cfba737e
-  printer-f0e11e04:
+      - units2
+  printer-0:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v3
         with:
           name: build
       - run: echo "dev"
+      - run: echo ${{ vars.test }}
       - uses: actions/upload-artifact@v3
         with:
           name: build
           path: "*"
     needs:
-      - units3-6b643fbc
+      - units3
     environment: dev
-  printer-504d744d:
+  printer-1:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v3
         with:
           name: build
       - run: echo "prod"
+      - run: echo ${{ vars.test }}
       - uses: actions/upload-artifact@v3
         with:
           name: build
           path: "*"
     needs:
-      - printer-f0e11e04
+      - printer-0
     environment: prod
 name: main
 on:
