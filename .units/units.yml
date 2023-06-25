@@ -14,10 +14,28 @@ commands:
   - run: echo "{{root.name}}"
     name: Run units2
 ---
-name: main
-kind: pipeline
-packed: true
+name: printer
+kind: command
+commands:
+  - echo "{{env}}"
+---
+name: per-env
+kind: container
+loop: root.envs
+as: env
+units:
+  - command:printer
+---
+name: root
+kind: container
 units:
   - command:units1
   - command:units2
   - command:units3
+---
+name: main
+kind: pipeline
+packed: true
+units:
+  - container:root
+  - container:per-env

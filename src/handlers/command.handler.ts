@@ -1,4 +1,5 @@
 import { replacer } from '../helpers';
+import { v4 as uuidv4 } from 'uuid';
 
 export class CommandHandler implements UnitHandler {
   isStandalone(unit: Unit): boolean {
@@ -7,6 +8,7 @@ export class CommandHandler implements UnitHandler {
 
   render(unit: Unit, state: RenderState, parameterBag: Record<string, any>) {
     const command = unit as CommandUnit;
+    const commandName = command.name + '-' + uuidv4().split('-')[0];
     const jobs = state.fragmentBlocks['jobs'] as Record<string, any>;
 
     const steps: any[] = [];
@@ -40,7 +42,7 @@ export class CommandHandler implements UnitHandler {
 
     steps.push(persist);
 
-    jobs[command.name] = replacer(
+    jobs[commandName] = replacer(
       {
         'runs-on': 'ubuntu-latest',
         steps,
@@ -49,7 +51,7 @@ export class CommandHandler implements UnitHandler {
       parameterBag,
     );
 
-    state.state['lastJob'] = command.name;
+    state.state['lastJob'] = commandName;
 
     // TODO: implement
   }

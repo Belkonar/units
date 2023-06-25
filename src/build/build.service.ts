@@ -3,6 +3,7 @@ import * as YAML from 'yaml';
 import { PipelineHandler } from '../handlers/pipeline.handler';
 import { CommandHandler } from '../handlers/command.handler';
 import { v4 as uuidv4 } from 'uuid';
+import { ContainerHandler } from '../handlers/container.handler';
 
 @Injectable()
 export class BuildService {
@@ -74,3 +75,4 @@ export class BuildService {
 
 BuildService.handlers['pipeline'] = new PipelineHandler();
 BuildService.handlers['command'] = new CommandHandler();
+BuildService.handlers['container'] = new ContainerHandler();

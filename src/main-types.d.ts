@@ -11,6 +11,12 @@ interface PipelineUnit extends Unit {
   reference: string;
 }
 
+interface ContainerUnit extends Unit {
+  units: string[];
+  loop?: string;
+  as?: string;
+}
+
 interface CommandUnit extends Unit {
   commands?: any[];
 }
