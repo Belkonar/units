@@ -21,7 +21,8 @@ interface CommandUnit extends Unit {
   commands?: any[];
   environment?: string;
   host?: any;
-  custom?: any;
+  container?: any;
+  extras?: any;
 }
 
 interface PackageUnit extends Unit {

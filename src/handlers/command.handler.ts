@@ -42,7 +42,7 @@ export class CommandHandler implements UnitHandler {
 
     steps.push(persist);
 
-    const extras = command.custom ?? {};
+    const extras = command.extras ?? {};
 
     const jobTemp: any = {
       'runs-on': command.host ?? 'ubuntu-latest',
@@ -50,6 +50,10 @@ export class CommandHandler implements UnitHandler {
       needs: [state.state['lastJob']],
       ...extras,
     };
+
+    if (command.container) {
+      jobTemp.container = command.container;
+    }
 
     if (command.environment) {
       jobTemp.environment = command.environment;
