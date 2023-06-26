@@ -1,0 +1,19 @@
+{
+  "tiers": [
+    {
+      "name": "np",
+      "account": "1234",
+      "environments": [
+        "test",
+        "beta"
+      ]
+    },
+    {
+      "name": "prod",
+      "account": "5678",
+      "environments": [
+        "prod"
+      ]
+    }
+  ]
+}

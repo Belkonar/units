@@ -1,0 +1,22 @@
+- name: printer
+  kind: command
+  commands:
+    - echo "<% tier.name %>"
+    - echo "<% env %>"
+- name: per-env
+  kind: container
+  loop: tier.environments
+  as: env
+  units:
+    - command:printer
+- name: per-tier
+  kind: container
+  loop: root.tiers
+  as: tier
+  units:
+    - container:per-env
+- name: main
+  kind: pipeline
+  parameters: config.json
+  units:
+      - container:per-tier

@@ -1,0 +1,56 @@
+jobs:
+  init:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/upload-artifact@v3
+        with:
+          name: build
+          path: |-
+            *
+            !.git/*
+  printer-0-0:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: build
+      - run: echo "np"
+      - run: echo "test"
+      - uses: actions/upload-artifact@v3
+        with:
+          name: build
+          path: "*"
+    needs:
+      - init
+  printer-0-1:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: build
+      - run: echo "np"
+      - run: echo "beta"
+      - uses: actions/upload-artifact@v3
+        with:
+          name: build
+          path: "*"
+    needs:
+      - printer-0-0
+  printer-1-0:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: build
+      - run: echo "prod"
+      - run: echo "prod"
+      - uses: actions/upload-artifact@v3
+        with:
+          name: build
+          path: "*"
+    needs:
+      - printer-0-1
+name: main
+on:
+  - push
