@@ -20,6 +20,8 @@ interface ContainerUnit extends Unit {
 interface CommandUnit extends Unit {
   commands?: any[];
   environment?: string;
+  host?: any;
+  custom?: any;
 }
 
 interface PackageUnit extends Unit {

@@ -42,24 +42,22 @@ export class CommandHandler implements UnitHandler {
 
     steps.push(persist);
 
+    const extras = command.custom ?? {};
+
     const jobTemp: any = {
-      'runs-on': 'ubuntu-latest',
+      'runs-on': command.host ?? 'ubuntu-latest',
       steps,
       needs: [state.state['lastJob']],
+      ...extras,
     };
 
     if (command.environment) {
       jobTemp.environment = command.environment;
     }
 
-    jobs[commandName] = replacer(
-      jobTemp,
-      parameterBag,
-    );
+    jobs[commandName] = replacer(jobTemp, parameterBag);
 
     state.state['lastJob'] = commandName;
-
-    // TODO: implement
   }
 
   renderStandalone(unit: Unit, state: RenderState): string[] {
